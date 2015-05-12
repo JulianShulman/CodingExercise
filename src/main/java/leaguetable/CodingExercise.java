@@ -14,11 +14,9 @@ public class CodingExercise {
    public static void main(final String[] args) {
 
       try {
-         final LeagueTableReader ltr = new LeagueTableReader();
-
          // Read in the league data.
          final File dataFile = new File("src/main/resources/football.dat");
-         final List<TeamLeagueData> teams = ltr.readDataFile(dataFile);
+         final List<TeamLeagueData> teams = TeamLeagueDataFactory.Instance.create(dataFile);
 
          // Sort with goal difference comparator
          Collections.sort(teams, new AbsoluteGoalDifferenceComparator());
@@ -26,9 +24,9 @@ public class CodingExercise {
          // Print out "league table"
          for (final TeamLeagueData team : teams) {
             System.out
-            .println(String.format("%-20s has an absolute goal difference of %2d, having scored %2d and conceded %2d",
-                        team.getTeamName(), TeamLeagueDataLogic.Instance.absoluteGoalDifference(team), team.getGoalsFor(),
-                  team.getGoalsAgainst()));
+                  .println(String.format("%-20s has an absolute goal difference of %2d, having scored %2d and conceded %2d",
+                  team.getTeamName(), TeamLeagueDataLogic.Instance.absoluteGoalDifference(team), team.getGoalsFor(),
+                        team.getGoalsAgainst()));
          }
 
          System.out.println("Therefore the team with the smallest absolute goal difference is " + teams.get(0).getTeamName());

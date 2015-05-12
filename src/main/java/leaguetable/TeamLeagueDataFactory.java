@@ -7,17 +7,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LeagueTableReader {
+public enum TeamLeagueDataFactory {
+
+   Instance;
 
    private final int teamField = 2;
    private final int goalsForField = 7;
    private final int goalsAgainstField = 9;
 
-   public LeagueTableReader() {
-
-   }
-
-   public List<TeamLeagueData> readDataFile(final File dataFile) throws IOException {
+   public List<TeamLeagueData> create(final File dataFile) throws IOException {
       final List<TeamLeagueData> teamsData = new ArrayList<TeamLeagueData>();
       final BufferedReader reader = new BufferedReader(new FileReader(dataFile));
 
@@ -27,7 +25,7 @@ public class LeagueTableReader {
          do {
             dataLine = reader.readLine();
             if (dataLine != null) {
-               final TeamLeagueData teamData = readDataLine(dataLine);
+               final TeamLeagueData teamData = create(dataLine);
                teamsData.add(teamData);
             }
          } while (dataLine != null);
@@ -37,12 +35,12 @@ public class LeagueTableReader {
       }
    }
 
-   public TeamLeagueData readDataLine(final String dataLine) {
+   public TeamLeagueData create(final String dataLine) {
       final String[] teamData = dataLine.split("\\s+");
 
       return new TeamLeagueData.Builder(teamData[this.teamField])
-      .goalsFor(Integer.parseInt(teamData[this.goalsForField]))
-      .goalsAgainst(Integer.parseInt(teamData[this.goalsAgainstField]))
-      .build();
+            .goalsFor(Integer.parseInt(teamData[this.goalsForField]))
+            .goalsAgainst(Integer.parseInt(teamData[this.goalsAgainstField]))
+            .build();
    }
 }
